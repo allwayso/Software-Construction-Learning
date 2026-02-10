@@ -5,6 +5,7 @@ package ps0.turtle;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.lang.Math;
 
 public class TurtleSoup {
 
@@ -15,7 +16,10 @@ public class TurtleSoup {
      * @param sideLength length of each side
      */
     public static void drawSquare(Turtle turtle, int sideLength) {
-        throw new RuntimeException("implement me!");
+        for(int i=0;i<4;i++) {
+            turtle.forward(sideLength);
+            turtle.turn(90);
+        }
     }
 
     /**
@@ -28,7 +32,7 @@ public class TurtleSoup {
      * @return angle in degrees, where 0 <= angle < 360
      */
     public static double calculateRegularPolygonAngle(int sides) {
-        throw new RuntimeException("implement me!");
+        return (double)180*(sides-2)/sides;
     }
 
     /**
@@ -42,7 +46,7 @@ public class TurtleSoup {
      * @return the integer number of sides
      */
     public static int calculatePolygonSidesFromAngle(double angle) {
-        throw new RuntimeException("implement me!");
+        return (int) Math.round(360/(180-angle));
     }
 
     /**
@@ -55,7 +59,11 @@ public class TurtleSoup {
      * @param sideLength length of each side
      */
     public static void drawRegularPolygon(Turtle turtle, int sides, int sideLength) {
-        throw new RuntimeException("implement me!");
+        double degree=180-calculateRegularPolygonAngle(sides);
+        for(int i=0;i<sides;i++) {
+            turtle.forward(sideLength);
+            turtle.turn(degree);
+        }
     }
 
     /**
@@ -79,7 +87,7 @@ public class TurtleSoup {
      */
     public static double calculateHeadingToPoint(double currentHeading, int currentX, int currentY,
                                                  int targetX, int targetY) {
-        throw new RuntimeException("implement me!");
+        return (90-Math.toDegrees(Math.atan2(targetY-currentY, targetX-currentX))-currentHeading+360)%360;
     }
 
     /**
@@ -97,8 +105,21 @@ public class TurtleSoup {
      *         otherwise of size (# of points) - 1
      */
     public static List<Double> calculateHeadings(List<Integer> xCoords, List<Integer> yCoords) {
-        throw new RuntimeException("implement me!");
+        int n=xCoords.size();
+        double currentHeading=0;
+        int currentX=xCoords.get(0);
+        int currentY=yCoords.get(0);
+        List<Double> headings=new ArrayList<Double>();
+        for(int i=1;i<n;i++) {
+            currentHeading=calculateHeadingToPoint(currentHeading, currentX, currentY, xCoords.get(i), yCoords.get(i));
+            headings.add(currentHeading);
+            currentX=xCoords.get(i);
+            currentY=yCoords.get(i);
+        }
+        return headings;
     }
+    
+    
 
     /**
      * Draw your personal, custom art.
@@ -108,8 +129,11 @@ public class TurtleSoup {
      * 
      * @param turtle the turtle context
      */
-    public static void drawPersonalArt(Turtle turtle) {
-        throw new RuntimeException("implement me!");
+    public static void drawPersonalArt(Turtle turtle,List<Integer> xCoords, List<Integer> yCoords) {
+        List<Double> headings=calculateHeadings(xCoords, yCoords);
+        //这里准备画依次连接所有点的直线，但是来不及，下次来做
+        //需要一个计算前后两点间距离的辅助方法
+        //乌龟要先移动到第一个点处，不过可以要求测试用例以(0,0)开始
     }
 
     /**
@@ -122,7 +146,7 @@ public class TurtleSoup {
     public static void main(String args[]) {
         DrawableTurtle turtle = new DrawableTurtle();
 
-        drawSquare(turtle, 40);
+        
 
         // draw the window
         turtle.draw();
