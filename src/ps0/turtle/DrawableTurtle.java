@@ -49,6 +49,18 @@ public class DrawableTurtle implements Turtle {
 
         this.actionList.add(new Action(ActionType.FORWARD, "forward " + steps + " steps", lineSeg));
     }
+    
+   
+    public void forward(double steps) {
+        double newX = currentPosition.x() + Math.cos(Math.toRadians(DEGREES_TO_VERTICAL - currentHeading)) * (double)steps;
+        double newY = currentPosition.y() + Math.sin(Math.toRadians(DEGREES_TO_VERTICAL - currentHeading)) * (double)steps;
+
+        LineSegment lineSeg = new LineSegment(currentPosition.x(), currentPosition.y(), newX, newY, currentColor);
+        this.lines.add(lineSeg);
+        this.currentPosition = new Point(newX, newY);
+
+        this.actionList.add(new Action(ActionType.FORWARD, "forward " + steps + " steps", lineSeg));
+    }
 
     public void turn(double degrees) {
         degrees = (degrees % CIRCLE_DEGREES + CIRCLE_DEGREES) % CIRCLE_DEGREES;

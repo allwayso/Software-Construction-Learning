@@ -1,0 +1,18 @@
+{
+  "java.home": "D:\\jdk-25_windows-x64_bin\\jdk-25.0.1",
+  "editor.quickSuggestions": {
+    "comments": "off",
+    "strings": "off",
+    "other": "off"
+  },
+  "editor.suggestSelection": "recentlyUsedByPrefix",
+  "editor.snippetSuggestions": "none",
+  "editor.wordBasedSuggestions": "matchingDocuments",
+  "editor.inlineSuggest.enabled": false,
+  "editor.suggest.showStatusBar": false,
+  "editor.codeActionWidget.includeNearbyQuickFixes": false,
+  "editor.lightbulb.enabled": "off",
+  "editor.hover.enabled": "off",
+  "editor.parameterHints.enabled": false,
+  "editor.suggestOnTriggerCharacters": false
+}

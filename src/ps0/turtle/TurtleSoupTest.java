@@ -4,6 +4,7 @@
 package ps0.turtle;
 
 import static org.junit.Assert.*;
+import java.util.Arrays;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -69,5 +70,19 @@ public class TurtleSoupTest {
         assertEquals(2, result.size());
         assertEquals(45.0, result.get(0), 0.001);
         assertEquals(315.0, result.get(1), 0.001);
+    }
+    
+    @Test
+    public void calculateLengthsTest() {
+        double DELTA = 0.0001;
+        List<Integer> xCoords = Arrays.asList(0, 5, 5, 10, 10, 13, 13, 20);
+        List<Integer> yCoords = Arrays.asList(0, 0, 12, 12, 15, 19, 19, 30);
+        List<Double> actualLengths = TurtleSoup.calculateLengths(xCoords, yCoords);
+        List<Double> expectedLengths = Arrays.asList(5.0, 12.0, 5.0, 3.0, 5.0, 0.0, Math.sqrt(170));
+        
+        assertEquals(expectedLengths.size(), actualLengths.size());
+        for (int i = 0; i < expectedLengths.size(); i++) {
+            assertEquals(expectedLengths.get(i), actualLengths.get(i), DELTA);
+        }
     }
 }

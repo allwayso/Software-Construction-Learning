@@ -110,6 +110,10 @@ public class TurtleSoup {
      */
     public static List<Double> calculateHeadings(List<Integer> xCoords, List<Integer> yCoords) {
         int n = xCoords.size();
+        if (n == 0)
+            throw new IllegalArgumentException("xCoords and yCoords must have at least one element");
+        if (n != yCoords.size())
+            throw new IllegalArgumentException("xCoords and yCoords must have the same size");
         double currentHeading = 0;
         int currentX = xCoords.get(0);
         int currentY = yCoords.get(0);
@@ -117,7 +121,7 @@ public class TurtleSoup {
         for (int i = 1; i < n; i++) {
             double turnHeading = calculateHeadingToPoint(currentHeading, currentX, currentY, xCoords.get(i),
                     yCoords.get(i));
-            currentHeading+=turnHeading;
+            currentHeading += turnHeading;
             headings.add(turnHeading);
             currentX = xCoords.get(i);
             currentY = yCoords.get(i);
@@ -125,38 +129,47 @@ public class TurtleSoup {
         return headings;
     }
 
-    public static List<Double> calculateLengths(List<Integer> xCoords, List<Integer> yCoords){
-        List<Double> lengths=new ArrayList<Double>();
-        int n=xCoords.size();
-        int currentX=xCoords.get(0);
-        int currentY=yCoords.get(0);
-        for(int i=1;i<n;i++) {
-            int nextX=xCoords.get(i),nextY=yCoords.get(i);
-            int dx=nextX-currentX,dy=nextY-currentY;
-            double length=Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
+    /**
+     * Calculate the distance between each pair of consecutive points.
+     * 
+     * @param xCoords list of x-coordinates (must be same length as yCoords)
+     * @param yCoords list of y-coordinates (must be same length as xCoords)
+     * @return list of distances between points
+     */
+
+    public static List<Double> calculateLengths(List<Integer> xCoords, List<Integer> yCoords) {
+        List<Double> lengths = new ArrayList<Double>();
+        int n = xCoords.size();
+        if (n == 0)
+            throw new IllegalArgumentException("xCoords and yCoords must have at least one element");
+        if (n != yCoords.size())
+            throw new IllegalArgumentException("xCoords and yCoords must have the same size");
+        int currentX = xCoords.get(0);
+        int currentY = yCoords.get(0);
+        for (int i = 1; i < n; i++) {
+            int nextX = xCoords.get(i), nextY = yCoords.get(i);
+            int dx = nextX - currentX, dy = nextY - currentY;
+            double length = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
             lengths.add(length);
-            currentX=nextX;
-            currentY=nextY;
+            currentX = nextX;
+            currentY = nextY;
         }
         return lengths;
     }
 
     /**
-     * Draw your personal, custom art.
+     * Draw the art by linking dots one by one
      * 
-     * Many interesting images can be drawn using the simple implementation of a
-     * turtle. For this function, draw something interesting; the complexity can be
-     * as little or as much as you want.
-     * 
-     * @param turtle the turtle context
+     * @param turtle  a turtle object
+     * @param xCoords list of x-coordinates (must be same length as yCoords)
+     * @param yCoords list of y-coordinates (must be same length as xCoords)
      */
-    
-    //要求第一个点为(0,0)
+
     public static void drawPersonalArt(DrawableTurtle turtle, List<Integer> xCoords, List<Integer> yCoords) {
         List<Double> headings = calculateHeadings(xCoords, yCoords);
-        List<Double> lengths=calculateLengths(xCoords, yCoords);
-        int n=headings.size();
-        for(int i=0;i<n;i++) {
+        List<Double> lengths = calculateLengths(xCoords, yCoords);
+        int n = headings.size();
+        for (int i = 0; i < n; i++) {
             turtle.turn(headings.get(i));
             turtle.forward(lengths.get(i));
         }
@@ -171,28 +184,22 @@ public class TurtleSoup {
      */
     public static void main(String args[]) {
         DrawableTurtle turtle = new DrawableTurtle();
-        /*
-        List<Integer> xCoords = Arrays.asList(0, 32, 32, -32, -32, 64, 64, -64, -64, 96, 96, -96, -96, 128, 128, -128, -128, 160, 160, -160, -160, 192, 192, -192, -192, 224, 224, -224, -224, 256, 256, 0);
-        List<Integer> yCoords = Arrays.asList(0, 0, 32, 32, -32, -32, 64, 64, -64, -64, 96, 96, -96, -96, 128, 128, -128, -128, 160, 160, -160, -160, 192, 192, -192, -192, 224, 224, -224, -224, 256, 0);
-        */
-        List<Integer> xCoords = Arrays.asList(
-                0,   // 起点：中心
-                10, 25, 45, 70, 95, 120, 140, 155, 165, 170, 165, 155, 140, 120, 95, 70, 45, 25, 10, // 右外层花瓣（弧形）
-                15, 35, 55, 75, 90, 95, 90, 75, 55, 35, 15, // 右内层花瓣（弧形）
-                0,   // 回到中心
-                -10, -25, -45, -70, -95, -120, -140, -155, -165, -170, -165, -155, -140, -120, -95, -70, -45, -25, -10, // 左外层花瓣
-                -15, -35, -55, -75, -90, -95, -90, -75, -55, -35, -15, // 左内层花瓣
-                0    // 终点：闭合
-            );
-            List<Integer> yCoords = Arrays.asList(
-                0,   // 起点：中心
-                200, 210, 218, 223, 225, 223, 218, 210, 195, 170, 140, 105, 70, 35, 0, -30, -55, -75, -85, // 右外层花瓣
-                -75, -55, -30, 0, 35, 70, 105, 140, 170, 195, 205, // 右内层花瓣
-                0,   // 回到中心
-                200, 210, 218, 223, 225, 223, 218, 210, 195, 170, 140, 105, 70, 35, 0, -30, -55, -75, -85, // 左外层花瓣
-                -75, -55, -30, 0, 35, 70, 105, 140, 170, 195, 205, // 左内层花瓣
-                0    // 终点：闭合
-            );
+        List<Integer> xCoords = Arrays.asList(0, 
+                10, 25, 45, 70, 95, 120, 140, 155, 165, 170, 165, 155, 140, 120, 95, 70, 45, 25, 10, 
+                15, 35, 55, 75, 90, 95, 90, 75, 55, 35, 15, 
+                0, 
+                -10, -25, -45, -70, -95, -120, -140, -155, -165, -170, -165, -155, -140, -120, -95, -70, -45, -25, -10,
+                -15, -35, -55, -75, -90, -95, -90, -75, -55, -35, -15, 
+                0 
+        );
+        List<Integer> yCoords = Arrays.asList(0, 
+                200, 210, 218, 223, 225, 223, 218, 210, 195, 170, 140, 105, 70, 35, 0, -30, -55, -75, -85, 
+                -75, -55, -30, 0, 35, 70, 105, 140, 170, 195, 205, 
+                0, 
+                200, 210, 218, 223, 225, 223, 218, 210, 195, 170, 140, 105, 70, 35, 0, -30, -55, -75, -85, 
+                -75, -55, -30, 0, 35, 70, 105, 140, 170, 195, 205,
+                0 
+        );
         drawPersonalArt(turtle, xCoords, yCoords);
         // draw the window
         turtle.draw();
